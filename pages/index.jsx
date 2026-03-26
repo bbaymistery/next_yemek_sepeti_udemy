@@ -1,7 +1,5 @@
 import Head from "next/head";
 import Home from "./home";
-import Header from "../components/layout/Header";
-import Reservation from "../components/Reservation";
 export default function Index({ categoryList, productList }) {
   return (
     <div className="">
@@ -18,7 +16,6 @@ export default function Index({ categoryList, productList }) {
           rel="stylesheet"
         />
       </Head>
-      <Header />
       <Home />
     </div>
   );

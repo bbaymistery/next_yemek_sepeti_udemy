@@ -1,4 +1,3 @@
-import React from "react";
 import Title from "./ui/Title";
 import { useFormik } from "formik";
 import { reservationSchema } from "../schema/reservation";
