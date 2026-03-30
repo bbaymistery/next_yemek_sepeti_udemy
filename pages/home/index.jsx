@@ -5,12 +5,12 @@ import Customers from "../../components/customers/Customers";
 import MenuWrapper from "../../components/product/MenuWrapper";
 import Reservation from "../../components/Reservation";
 
-const Index = () => {
+const Index = ({ categoryList }) => {
     return (
         <>
             <Carousel />
             <Campaigns />
-            <MenuWrapper />
+            <MenuWrapper categoryList={categoryList} />
             <About />
             <Reservation />
             <Customers />
@@ -18,4 +18,13 @@ const Index = () => {
     )
 };
 
-export default Index; 
+export default Index;
+
+export const getServerSideProps = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
+    return {
+        props: {
+            categoryList: res.data ? res.data : [],
+        },
+    };
+};
