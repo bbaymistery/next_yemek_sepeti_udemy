@@ -1,4 +1,4 @@
-import Category from "../../../models/Category";
+import Footer from "../../../models/Footer";
 import dbConnect from "../../../util/dbConnect";
 
 const handler = async (req, res) => {
@@ -10,17 +10,19 @@ const handler = async (req, res) => {
 
   if (method === "GET") {
     try {
-      const category = await Category.findById(id);
-      res.status(200).json(category);
+      const footer = await Footer.findById(id);
+      res.status(200).json(footer);
     } catch (err) {
       console.log(err);
     }
   }
 
-  if (method === "DELETE") {
+  if (method === "PUT") {
     try {
-      const category = await Category.findByIdAndDelete(id);
-      res.status(200).json(category);
+      const footer = await Footer.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      res.status(200).json(footer);
     } catch (err) {
       console.log(err);
     }

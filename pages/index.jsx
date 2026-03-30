@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Home from "./home";
+import axios from "axios";
 export default function Index({ categoryList, productList }) {
   return (
     <div className="">

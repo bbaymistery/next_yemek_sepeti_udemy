@@ -1,3 +1,4 @@
+import axios from "axios";
 import MenuWrapper from "../../components/product/MenuWrapper";
 
 const Index = ({ categoryList }) => {

@@ -1,78 +1,51 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "../../../util/mongo";
 import User from "../../../models/User";
 import dbConnect from "../../../util/dbConnect";
 import bcrypt from "bcryptjs";
-
-// MongoDB bağlantısını başlat
 dbConnect();
 
 export default NextAuth({
-    providers: [
-        // GitHub ile login (OAuth)
-        GithubProvider({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
-        }),
+  /*  adapter: MongoDBAdapter(clientPromise), */
+  providers: [
+    GithubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
 
-        // Kendi email/username + password login sistemimiz
-        CredentialsProvider({
-            name: "Credentials",
-
-            // Login formunda görünecek inputlar
-            credentials: {
-                identifier: { label: "Email or Username", type: "text" },
-                password: { label: "Password", type: "password" },
-            },
-
-            // Login işleminin ana kontrol noktası
-            async authorize(credentials) {
-                const { identifier, password } = credentials;
-
-                // Kullanıcıyı email veya username ile bul
-                const user = await User.findOne({
-                    $or: [
-                        { email: identifier },
-                        { username: identifier }
-                    ]
-                });
-
-                // Kullanıcı yoksa hata fırlat
-                if (!user) {
-                    throw new Error("User not found");
-                }
-
-                // Şifre kontrolünü ayrı fonksiyona gönder
-                return signInUser({ user, password });
-            },
-        }),
-    ],
-
-    // Custom login sayfası
-    pages: {
-        signIn: "/auth/login",
-    },
-
-    // Session güvenliği için secret
-    secret: process.env.NEXTAUTH_SECRET,
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        const email = credentials.email;
+        const password = credentials.password;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+          throw new Error("You haven't registered yet!");
+        }
+        if (user) {
+          return signInUser({ user, password });
+        }
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/auth/login",
+  },
+  database: process.env.MONGODB_URI,
+  secret: "secret",
 });
 
-
-// Şifre kontrolünü yapan yardımcı fonksiyon
 const signInUser = async ({ user, password }) => {
-    // Girilen şifre ile DB'deki hashlenmiş şifreyi karşılaştır
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    // Şifre yanlışsa hata ver
-    if (!isMatch) {
-        throw new Error("Incorrect password!");
-    }
-
-    // Login başarılıysa sadece gerekli bilgileri döndür
-    return {
-        id: user._id,
-        email: user.email,
-        name: user.username,
-    };
+  const isMAtch = await bcrypt.compare(password, user.password);
+  if (!isMAtch) {
+    throw new Error("Incorrect password!");
+  }
+  return user;
 };

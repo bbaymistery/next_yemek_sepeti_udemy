@@ -1,4 +1,4 @@
-import Category from "../../../models/Category";
+import Product from "../../../models/Product";
 import dbConnect from "../../../util/dbConnect";
 
 const handler = async (req, res) => {
@@ -10,8 +10,8 @@ const handler = async (req, res) => {
 
   if (method === "GET") {
     try {
-      const category = await Category.findById(id);
-      res.status(200).json(category);
+      const product = await Product.findById(id);
+      res.status(200).json(product);
     } catch (err) {
       console.log(err);
     }
@@ -19,8 +19,8 @@ const handler = async (req, res) => {
 
   if (method === "DELETE") {
     try {
-      const category = await Category.findByIdAndDelete(id);
-      res.status(200).json(category);
+      const product = await Product.findByIdAndDelete(id);
+      res.status(200).json(product);
     } catch (err) {
       console.log(err);
     }

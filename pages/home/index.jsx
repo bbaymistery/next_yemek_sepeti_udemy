@@ -1,3 +1,4 @@
+import axios from "axios";
 import About from "../../components/About";
 import Campaigns from "../../components/Campaigns";
 import Carousel from "../../components/Carousel";
