@@ -1,25 +1,28 @@
+import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import Input from "../../components/form/Input";
 import Title from "../../components/ui/Title";
 import { registerSchema } from "../../schema/register";
-import { useSession, signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const Register = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  // redirect if user logged in
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/");
-    }
-  }, [session, status, router]);
-
+  const { push } = useRouter();
   const onSubmit = async (values, actions) => {
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/register`,
+        values
+      );
+      if (res.status === 200) {
+        toast.success("User created successfully");
+        push("/auth/login");
+      }
+    } catch (err) {
+      toast.error(err.response.data.message);
+      console.log(err);
+    }
     actions.resetForm();
   };
   const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
@@ -93,14 +96,6 @@ const Register = () => {
         <div className="flex flex-col w-full gap-y-3 mt-6">
           <button className="btn-primary" type="submit">
             REGISTER
-          </button>
-          <button
-            className="btn-primary !bg-secondary"
-            type="button"
-            onClick={() => signIn("github")}
-          >
-            <i className="fa fa-github mr-2 text-lg"></i>
-            GITHUB
           </button>
           <Link href="/auth/login">
             <span className="text-sm underline cursor-pointer text-secondary">
