@@ -3,29 +3,43 @@ import dbConnect from "../../../util/dbConnect";
 
 const handler = async (req, res) => {
   await dbConnect();
-  const {
-    method,
-    query: { id },
-  } = req;
+  const { method, query } = req;
+  const { id } = query;
 
-  if (method === "GET") {
-    try {
-      const footer = await Footer.findById(id);
-      res.status(200).json(footer);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  switch (method) {
+    case "PUT":
+      try {
+        const updatedFooter = await Footer.findByIdAndUpdate(id, req.body, {
+          new: true,
+          runValidators: true,
+        });
 
-  if (method === "PUT") {
-    try {
-      const footer = await Footer.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
-      res.status(200).json(footer);
-    } catch (err) {
-      console.log(err);
-    }
+        if (!updatedFooter) {
+          return res.status(404).json({ message: "Footer not found" });
+        }
+
+        return res.status(200).json(updatedFooter);
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Footer could not be updated." });
+      }
+
+    case "DELETE":
+      try {
+        const deletedFooter = await Footer.findByIdAndDelete(id);
+
+        if (!deletedFooter) {
+          return res.status(404).json({ message: "Footer not found" });
+        }
+
+        return res.status(200).json({ message: "Footer deleted successfully" });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Footer could not be deleted." });
+      }
+
+    default:
+      return res.status(405).json({ message: "Method not allowed" });
   }
 };
 

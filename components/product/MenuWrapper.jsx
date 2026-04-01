@@ -6,11 +6,12 @@ const MenuWrapper = ({ categoryList, productList }) => {
   const [active, setActive] = useState(0);
   const [filter, setFilter] = useState([]);
   const [productLimit, setProductLimit] = useState(3);
+
   useEffect(() => {
     setFilter(
-      productList?.filter(
+      productList.filter(
         (product) =>
-          product.category === categoryList[active]?.title.toLowerCase()
+          product.category === categoryList[active].title.toLowerCase()
       )
     );
   }, [categoryList, productList, active]);
@@ -38,7 +39,7 @@ const MenuWrapper = ({ categoryList, productList }) => {
         </div>
       </div>
       <div className="mt-8 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 min-h-[450px]">
-        {filter?.length > 0 &&
+        {filter.length > 0 &&
           filter
             .slice(0, productLimit)
             .map((product) => <MenuItem key={product._id} product={product} />)}

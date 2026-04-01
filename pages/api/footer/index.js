@@ -5,22 +5,27 @@ const handler = async (req, res) => {
   await dbConnect();
   const { method } = req;
 
-  if (method === "GET") {
-    try {
-      const footer = await Footer.find();
-      res.status(200).json(footer);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  switch (method) {
+    case "GET":
+      try {
+        const footer = await Footer.find();
+        return res.status(200).json(footer);
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Footer data could not be fetched." });
+      }
 
-  if (method === "POST") {
-    try {
-      const newFooter = await Footer.create(req.body);
-      res.status(201).json(newFooter);
-    } catch (err) {
-      console.log(err);
-    }
+    case "POST":
+      try {
+        const newFooter = await Footer.create(req.body);
+        return res.status(201).json(newFooter);
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Footer could not be created." });
+      }
+
+    default:
+      return res.status(405).json({ message: "Method not allowed" });
   }
 };
 

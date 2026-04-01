@@ -5,32 +5,35 @@ const FooterSchema = new mongoose.Schema(
     location: {
       type: String,
       required: true,
+      default: "",
     },
     email: {
       type: String,
       required: true,
+      default: "",
     },
     phoneNumber: {
       type: String,
       required: true,
+      default: "",
     },
     desc: {
       type: String,
       required: true,
+      default: "",
     },
     socialMedia: {
       type: [
         {
-          icon: { type: String },
-          link: { type: String },
+          icon: { type: String, default: "" },
+          link: { type: String, default: "" },
         },
       ],
+      default: [],
     },
     openingHours: {
-      type: {
-        day: { type: String },
-        hour: { type: String },
-      },
+      day: { type: String, default: "" },
+      hour: { type: String, default: "" },
     },
   },
   { timestamps: true }
