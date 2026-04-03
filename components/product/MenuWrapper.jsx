@@ -11,47 +11,63 @@ const MenuWrapper = ({ categoryList, productList }) => {
     setFilter(
       productList.filter(
         (product) =>
-          product.category === categoryList[active].title.toLowerCase()
+          product.category === categoryList[active]?.title.toLowerCase()
       )
     );
   }, [categoryList, productList, active]);
 
   return (
-    <div className="container mx-auto  mb-16">
-      <div className="flex flex-col items-center w-full">
-        <Title addClass="text-[40px]">Our Menu</Title>
-        <div className="mt-10">
-          {categoryList &&
-            categoryList.map((category, index) => (
-              <button
-                className={`px-6 py-2  rounded-3xl ${
-                  index === active && "bg-secondary text-white"
-                }`}
-                key={category._id}
-                onClick={() => {
-                  setActive(index);
-                  setProductLimit(3);
-                }}
-              >
-                {category.title}
-              </button>
-            ))}
-        </div>
+    <div className="container mx-auto py-10 px-4 xl:px-0">
+      {/* Section Header */}
+      <div className="text-center mb-8">
+        <Title addClass="text-[40px] text-secondary">Our Menu</Title>
+        <p className="text-gray-400 mt-2 text-sm max-w-md mx-auto">
+          Explore our carefully crafted dishes, made with the finest ingredients
+        </p>
       </div>
-      <div className="mt-8 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 min-h-[450px]">
+
+      {/* Category Tabs */}
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+        {categoryList &&
+          categoryList.map((category, index) => (
+            <button
+              key={category._id}
+              onClick={() => {
+                setActive(index);
+                setProductLimit(3);
+              }}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-200 ${
+                index === active
+                  ? "bg-primary text-secondary shadow-[0_4px_20px_rgba(255,190,51,0.35)]"
+                  : "bg-secondary/10 text-secondary hover:bg-secondary hover:text-white"
+              }`}
+            >
+              {category.title}
+            </button>
+          ))}
+      </div>
+
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filter.length > 0 &&
           filter
             .slice(0, productLimit)
-            .map((product) => <MenuItem key={product._id} product={product} />)}
+            .map((product) => (
+              <MenuItem key={product._id} product={product} />
+            ))}
       </div>
-      <div className="flex items-center justify-center w-full mt-8">
-        <button
-          className="btn-primary"
-          onClick={() => setProductLimit(productLimit + 3)}
-        >
-          View More
-        </button>
-      </div>
+
+      {/* View More */}
+      {filter.length > productLimit && (
+        <div className="flex justify-center mt-8">
+          <button
+            className="btn-primary"
+            onClick={() => setProductLimit(productLimit + 3)}
+          >
+            View More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

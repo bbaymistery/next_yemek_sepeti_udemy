@@ -15,7 +15,7 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <header className="h-[5.5rem] z-50 relative w-full bg-secondary">
+    <header className="h-[5.5rem] z-50 sticky top-0 w-full bg-secondary">
       <div className="container mx-auto text-white flex justify-between items-center h-full px-4 sm:px-0">
         <Logo />
 

@@ -23,8 +23,8 @@ const Carousel = () => {
   };
 
   return (
-    <div className="h-screen w-full -mt-[88px]">
-      <div className="absolute top-0 left-0 w-full h-full">
+    <div className="min-h-[100vh] w-full -mt-[88px] relative">
+      <div className="absolute top-0 left-0 w-full h-full -z-10">
         <div className="relative h-full w-full">
           <Image
             src="/images/hero-bg.jpg"
@@ -37,27 +37,30 @@ const Carousel = () => {
       </div>
       <Slider {...settings}>
         <div>
-          <div className="mt-48 container mx-auto  text-white flex flex-col items-start gap-y-8">
-            <Title addClass="text-5xl">Fast Food Restaurant</Title>
-            <p className="text-sm sm:w-2/5 w-full">
-              Doloremque, itaque aperiam facilis rerum, commodi, temporibus
-              sapiente ad mollitia laborum quam quisquam esse error unde.
-              Tempora ex doloremque, labore, sunt repellat dolore, iste magni
-              quos nihil ducimus libero ipsam.
+          <div className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10">
+            <Title addClass="text-5xl sm:text-6xl font-bold tracking-wide drop-shadow-md">Taste the Perfection</Title>
+            <p className="text-sm sm:text-lg sm:w-2/5 w-full leading-relaxed font-medium drop-shadow-sm text-gray-200">
+              Experience the ultimate blend of flavors with our handcrafted burgers,
+              crispy fries, and refreshing beverages. Made daily with fresh, locally
+              sourced ingredients to deliver a premium dining experience that you
+              simply won't forget.
             </p>
-            <button className="btn-primary">Order Now</button>
+            <button className="btn-primary rounded-full px-8 py-3 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              Order Now
+            </button>
           </div>
         </div>
         <div>
-          <div className="mt-48 container mx-auto  text-white flex flex-col items-start gap-y-8">
-            <Title addClass="text-5xl">Fast Food Restaurant</Title>
-            <p className="text-sm sm:w-2/5 w-full">
-              Doloremque, itaque aperiam facilis rerum, commodi, temporibus
-              sapiente ad mollitia laborum quam quisquam esse error unde.
-              Tempora ex doloremque, labore, sunt repellat dolore, iste magni
-              quos nihil ducimus libero ipsam.
+          <div className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10">
+            <Title addClass="text-5xl sm:text-6xl font-bold tracking-wide drop-shadow-md">Fresh & Delicious</Title>
+            <p className="text-sm sm:text-lg sm:w-2/5 w-full leading-relaxed font-medium drop-shadow-sm text-gray-200">
+              We believe in serving food that not only tastes incredible but is made
+              with genuine passion. From our signature sauces to our perfectly toasted buns,
+              every bite is a testament to our dedication to quality and taste.
             </p>
-            <button className="btn-primary">Order Now</button>
+            <button className="btn-primary rounded-full px-8 py-3 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              Order Now
+            </button>
           </div>
         </div>
       </Slider>

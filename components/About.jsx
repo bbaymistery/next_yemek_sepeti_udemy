@@ -1,31 +1,45 @@
-
 import Image from "next/image";
 import Title from "./ui/Title";
 
 const About = () => {
-    return (
-        <div className="bg-secondary py-14">
-            <div className="container mx-auto flex items-center text-white gap-20 justify-center flex-wrap-reverse">
-                <div className="flex justify-center">
-                    <div className="relative sm:w-[445px] sm:h-[600px]  flex justify-center w-[300px] h-[450px]">
-                        <Image src="/images/about-img.png" alt="" layout="fill" />
-                    </div>
-                </div>
-                <div className="md:w-1/2 ">
-                    <Title addClass="text-[40px]">We Are Feane</Title>
-                    <p className="my-5 flex flex-col items-center">
-                        There are many variations of passages of Lorem Ipsum available, but
-                        the majority have suffered alteration in some form, by injected
-                        humour, or randomised words which don`t look even slightly
-                        believable. If you are going to use a passage of Lorem Ipsum, you
-                        need to be sure there isn`t anything embarrassing hidden in the
-                        middle of text. All
-                    </p>
-                    <button className="btn-primary">Read More</button>
-                </div>
-            </div>
+  return (
+    <section className="relative w-full min-h-[550px] flex items-center overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/about-img.png"
+          alt="About Feane"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+          priority
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-secondary/85"></div>
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto relative z-10 px-4 xl:px-0 py-20">
+        <div className="max-w-2xl">
+          <Title addClass="text-[40px] md:text-5xl text-white mb-6">
+            We Are Feane
+          </Title>
+          <div className="w-16 h-1 bg-primary rounded-full mb-6"></div>
+          <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-4">
+            At Feane, we believe that food is more than just a meal — it&apos;s an
+            experience. Every dish we serve is crafted with passion, using the
+            freshest ingredients sourced from local farms.
+          </p>
+          <p className="text-gray-400 text-base leading-relaxed mb-8">
+            From our wood-fired pizzas to our signature gourmet burgers, we pour
+            heart and soul into every recipe. Join thousands of happy customers
+            who have made Feane their go-to destination for unforgettable flavors.
+          </p>
+          <button className="btn-primary">Read More</button>
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default About;
