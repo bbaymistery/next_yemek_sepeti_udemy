@@ -1,10 +1,9 @@
 
-import React from "react";
 import About from "../../components/About";
 
 const Index = () => {
   return (
-    <div>
+    <div className="">
       <About />
     </div>
   );

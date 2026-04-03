@@ -22,27 +22,31 @@ const MenuItem = ({ product }) => {
   };
 
   return (
-    <div className="group relative bg-secondary rounded-2xl overflow-hidden flex flex-col">
-      {/* Image Area */}
+    <div className="group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
+      {/* Image */}
       <Link href={`/product/${product._id}`}>
-        <div className="relative w-full h-52 bg-[#1a1e27] cursor-pointer overflow-hidden">
+        <div className="relative w-full h-56 bg-black/20 cursor-pointer overflow-hidden">
           <Image
             src={product.img}
             alt={product.title}
             layout="fill"
-            objectFit="contain"
-            className="p-6 group-hover:scale-105 transition-transform duration-500"
+            objectFit="cover"
+            className="group-hover:scale-110 transition-transform duration-500"
             priority
           />
-          {/* Subtle gradient overlay at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-secondary to-transparent"></div>
+          {/* Gradient overlay on image */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          {/* Price badge */}
+          <div className="absolute top-4 right-4 bg-primary text-secondary text-sm font-extrabold px-4 py-1.5 rounded-full shadow-lg">
+            ${product.prices[0]}
+          </div>
         </div>
       </Link>
 
-      {/* Content Area */}
+      {/* Content */}
       <div className="flex flex-col flex-1 p-5">
         <Link href={`/product/${product._id}`}>
-          <h4 className="text-lg font-bold text-white cursor-pointer hover:text-primary transition-colors duration-200 leading-tight">
+          <h4 className="text-lg font-bold text-white cursor-pointer hover:text-primary transition-colors duration-200">
             {product.title}
           </h4>
         </Link>
@@ -50,17 +54,15 @@ const MenuItem = ({ product }) => {
           {product.desc}
         </p>
 
-        {/* Price + Cart Row */}
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
-          <span className="text-xl font-extrabold text-primary">${product.prices[0]}</span>
-          <button
-            className="w-10 h-10 rounded-full bg-primary/15 text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/15 disabled:hover:text-primary"
-            disabled={findCart}
-            onClick={handleClick}
-          >
-            <RiShoppingCart2Fill size={16} />
-          </button>
-        </div>
+        {/* Add to Cart */}
+        <button
+          className="mt-4 w-full py-3 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10 disabled:hover:text-primary"
+          disabled={findCart}
+          onClick={handleClick}
+        >
+          <RiShoppingCart2Fill size={16} />
+          {findCart ? "Already in Cart" : "Add to Cart"}
+        </button>
       </div>
     </div>
   );
