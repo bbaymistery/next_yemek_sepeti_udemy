@@ -22,10 +22,10 @@ const MenuItem = ({ product }) => {
   };
 
   return (
-    <div className="group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
+    <div className="group bg-white rounded-2xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 flex flex-col border border-gray-100">
       {/* Image */}
       <Link href={`/product/${product._id}`}>
-        <div className="relative w-full h-56 bg-black/20 cursor-pointer overflow-hidden">
+        <div className="relative w-full h-52 bg-gray-50 cursor-pointer overflow-hidden">
           <Image
             src={product.img}
             alt={product.title}
@@ -34,8 +34,6 @@ const MenuItem = ({ product }) => {
             className="group-hover:scale-110 transition-transform duration-500"
             priority
           />
-          {/* Gradient overlay on image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
           {/* Price badge */}
           <div className="absolute top-4 right-4 bg-primary text-secondary text-sm font-extrabold px-4 py-1.5 rounded-full shadow-lg">
             ${product.prices[0]}
@@ -46,7 +44,7 @@ const MenuItem = ({ product }) => {
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
         <Link href={`/product/${product._id}`}>
-          <h4 className="text-lg font-bold text-white cursor-pointer hover:text-primary transition-colors duration-200">
+          <h4 className="text-lg font-bold text-secondary cursor-pointer hover:text-primary transition-colors duration-200">
             {product.title}
           </h4>
         </Link>
@@ -56,7 +54,7 @@ const MenuItem = ({ product }) => {
 
         {/* Add to Cart */}
         <button
-          className="mt-4 w-full py-3 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10 disabled:hover:text-primary"
+          className="mt-4 w-full py-3 rounded-xl bg-secondary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary hover:text-secondary transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-secondary disabled:hover:text-white"
           disabled={findCart}
           onClick={handleClick}
         >

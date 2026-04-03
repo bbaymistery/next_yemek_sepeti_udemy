@@ -17,7 +17,7 @@ export default function Index({ categoryList, productList }) {
           rel="stylesheet"
         />
       </Head>
-      <Home categoryList={categoryList} productList={productList} />/
+      <Home categoryList={categoryList} productList={productList} />
     </div>
   );
 }

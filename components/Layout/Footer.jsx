@@ -22,10 +22,9 @@ const Footer = () => {
 
   return (
     <footer className="bg-secondary text-white">
-      {/* Top accent line */}
-      <div className="h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent"></div>
-
-      <div className="container mx-auto px-4 xl:px-0 pt-16 pb-8">
+      <div className="container mx-auto px-4 xl:px-0 pt-12 pb-8">
+        {/* Subtle divider */}
+        <div className="border-t border-white/10 mb-12"></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
           
           {/* Contact Us */}

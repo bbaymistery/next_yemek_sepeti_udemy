@@ -1,31 +1,45 @@
 import Image from "next/image";
+import { FaStar } from "react-icons/fa";
 
-const CustomerItem = ({ imgSrc }) => {
+const CustomerItem = ({ imgSrc, name, role, text }) => {
   return (
-     <div className="mt-5 mx-4">
-      <div className="p-6 bg-secondary text-white rounded-[5px]">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam
-        </p>
-        <div className="flex flex-col mt-4">
-          <span className="text-lg font-semibold">Moana Michell</span>
-          <span className="text-[15px]">magna aliqua</span>
+    <div className="px-3 mt-2">
+      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-7 relative">
+        {/* Quote icon */}
+        <div className="absolute top-6 right-7 text-primary/20 text-5xl font-serif leading-none select-none">
+          &ldquo;
         </div>
-      </div>
 
-      <div
-        className="relative w-28 h-28 border-4 border-primary rounded-full mt-8 before:content-[''] before:absolute before:top-0 
-      flex justify-center before:-translate-y-3 before:rotate-45 before:bg-primary before:w-5 before:h-5 "
-      >
-        <Image
-          src={imgSrc}
-          alt=""
-          layout="fill"
-          objectFit="contain"
-          className="rounded-full"
-        />
+        {/* Stars */}
+        <div className="flex gap-1 mb-4">
+          {[...Array(5)].map((_, i) => (
+            <FaStar key={i} size={14} className="text-primary" />
+          ))}
+        </div>
+
+        {/* Testimonial Text */}
+        <p className="text-gray-300 text-sm leading-relaxed mb-6 pr-6">
+          {text ||
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
+        </p>
+
+        {/* Customer Info */}
+        <div className="flex items-center gap-4 pt-5 border-t border-white/10">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-primary flex-shrink-0">
+            <Image
+              src={imgSrc}
+              alt={name || "Customer"}
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+          <div>
+            <h5 className="text-white font-semibold text-sm">
+              {name || "Customer Name"}
+            </h5>
+            <span className="text-primary text-xs">{role || "Customer"}</span>
+          </div>
+        </div>
       </div>
     </div>
   );

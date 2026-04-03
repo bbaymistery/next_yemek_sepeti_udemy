@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Title from "../ui/Title";
 import MenuItem from "./MenuItem";
 
@@ -18,28 +17,14 @@ const MenuWrapper = ({ categoryList, productList }) => {
   }, [categoryList, productList, active]);
 
   return (
-    <section className="relative w-full min-h-[600px] overflow-hidden py-20">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/menu-bg.png"
-          alt="Menu Background"
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
-          priority
-        />
-        <div className="absolute inset-0 bg-secondary/90"></div>
-      </div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 xl:px-0 relative z-10">
+    <section className="py-20 bg-white">
+      <div className="container mx-auto px-4 xl:px-0">
         {/* Section Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-primary text-xs font-bold uppercase tracking-[0.25em] mb-3">
             Explore
           </span>
-          <Title addClass="text-[40px] text-white leading-tight">
+          <Title addClass="text-[40px] text-secondary leading-tight">
             Our Menu
           </Title>
           <div className="w-12 h-1 bg-primary rounded-full mx-auto mt-4 mb-4"></div>
@@ -59,10 +44,10 @@ const MenuWrapper = ({ categoryList, productList }) => {
                   setActive(index);
                   setProductLimit(6);
                 }}
-                className={`px-7 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 border ${
+                className={`px-7 py-2.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 border-2 ${
                   index === active
                     ? "bg-primary text-secondary border-primary shadow-[0_4px_20px_rgba(255,190,51,0.3)]"
-                    : "bg-white/5 text-gray-300 border-white/15 hover:border-primary hover:text-primary backdrop-blur-sm"
+                    : "bg-transparent text-gray-400 border-gray-200 hover:border-primary hover:text-primary"
                 }`}
               >
                 {category.title}
@@ -83,7 +68,7 @@ const MenuWrapper = ({ categoryList, productList }) => {
         {/* Empty State */}
         {filter.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">
+            <p className="text-gray-400 text-lg">
               No dishes available in this category yet.
             </p>
           </div>
@@ -93,7 +78,7 @@ const MenuWrapper = ({ categoryList, productList }) => {
         {filter.length > productLimit && (
           <div className="flex justify-center mt-12">
             <button
-              className="px-10 py-3 rounded-full bg-primary text-secondary text-sm font-bold tracking-wide hover:bg-primary/90 transition-all duration-300 shadow-[0_4px_20px_rgba(255,190,51,0.3)] hover:-translate-y-0.5"
+              className="px-10 py-3 rounded-full bg-secondary text-white text-sm font-bold tracking-wide hover:bg-primary hover:text-secondary transition-all duration-300 shadow-lg hover:-translate-y-0.5"
               onClick={() => setProductLimit(productLimit + 6)}
             >
               View More Dishes

@@ -232,67 +232,98 @@ const Footer = () => {
   };
 
   return (
-    <form className="lg:p-8 flex-1 lg:mt-0 mt-5" onSubmit={handleSubmit}>
-      <Title addClass="text-[40px]">Footer Settings</Title>
-
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4">
-        {inputs.map((input) => (
-          <Input
-            key={input.id}
-            {...input}
-            onBlur={handleBlur}
-            onChange={handleChange}
-          />
-        ))}
+    <div className="flex-1 w-full flex flex-col">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <Title addClass="text-[40px] text-gray-800">Footer Settings</Title>
+          <p className="text-gray-500 mt-1">Configure global footer details and social links.</p>
+        </div>
       </div>
 
-      <div className="mt-4 flex justify-between md:items-center md:flex-row flex-col gap-4">
-        <div className="flex items-center gap-4">
-          <Input
-            placeholder="Link Address"
-            onChange={(e) => setLinkAddress(e.target.value)}
-            value={linkAddress}
-          />
-
-          <Input
-            placeholder="Icon Name"
-            onChange={(e) => setIconName(e.target.value)}
-            value={iconName}
-          />
-
-          <button className="btn-primary" type="button" onClick={handleCreate}>
-            Add
-          </button>
+      <form className="max-w-4xl" onSubmit={handleSubmit}>
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-8 transition-all hover:shadow-md">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-4">General Information</h3>
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+            {inputs.map((input) => (
+              <div key={input.id}>
+                <Input
+                  {...input}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <ul className="flex items-center gap-6 flex-wrap">
-          {socialMediaLinks?.map((item, index) => (
-            <li key={index} className="flex items-center">
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center"
-              >
-                <i className={`${item.icon} text-2xl`}></i>
-              </a>
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-8 transition-all hover:shadow-md">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 border-b border-gray-100 pb-4">Social Media Links</h3>
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <div className="flex-1 w-full">
+              <Input
+                placeholder="https://facebook.com"
+                onChange={(e) => setLinkAddress(e.target.value)}
+                value={linkAddress}
+              />
+            </div>
+            <div className="flex-1 w-full relative">
+              <Input
+                placeholder="fa fa-facebook"
+                onChange={(e) => setIconName(e.target.value)}
+                value={iconName}
+              />
+            </div>
+            <button 
+              className="w-full md:w-auto px-8 py-4 mt-2 md:mt-0 rounded-xl text-white font-bold bg-secondary shadow-md shadow-secondary/30 hover:-translate-y-0.5 hover:bg-secondary/90 transition-all outline-none whitespace-nowrap" 
+              type="button" 
+              onClick={handleCreate}
+            >
+              Add Link
+            </button>
+          </div>
 
-              <button
-                className="text-danger"
-                onClick={() => handleDeleteSocial(index)}
-                type="button"
-              >
-                <i className="fa fa-trash text-xl ml-2"></i>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+          {socialMediaLinks?.length > 0 && (
+            <div className="mt-8 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+              <ul className="flex items-center gap-4 flex-wrap">
+                {socialMediaLinks?.map((item, index) => (
+                  <li key={index} className="flex items-center bg-white border border-gray-200 rounded-xl p-3 pr-4 shadow-sm group hover:border-primary transition-all">
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 group-hover:bg-primary group-hover:text-white transition-colors"
+                    >
+                      <i className={`${item.icon} text-lg`}></i>
+                    </a>
+                    <div className="ml-3 mr-4 flex flex-col">
+                       <span className="text-xs text-gray-400 font-bold uppercase">Link</span>
+                       <span className="text-sm text-gray-700 max-w-[120px] truncate">{item.link.replace('https://', '')}</span>
+                    </div>
 
-      <button className="btn-primary mt-4" type="submit">
-        {footerData?._id ? "Update" : "Create"}
-      </button>
-    </form>
+                    <button
+                      className="text-gray-400 hover:text-danger hover:bg-red-50 p-2 rounded-lg transition-colors"
+                      onClick={() => handleDeleteSocial(index)}
+                      type="button"
+                    >
+                      <i className="fa fa-trash text-lg"></i>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <button 
+            className="px-10 py-4 rounded-xl text-white text-lg font-bold bg-primary shadow-lg shadow-primary/40 hover:-translate-y-1 hover:bg-primary/95 transition-all outline-none w-full md:w-auto" 
+            type="submit"
+          >
+            {footerData?._id ? "Update Footer Settings" : "Create Footer Settings"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
