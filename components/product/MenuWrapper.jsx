@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Title from "../ui/Title";
 import MenuItem from "./MenuItem";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MenuWrapper = ({ categoryList, productList }) => {
   const [active, setActive] = useState(0);
@@ -20,7 +21,13 @@ const MenuWrapper = ({ categoryList, productList }) => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4 xl:px-0">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
           <span className="inline-block text-primary text-xs font-bold uppercase tracking-[0.25em] mb-3">
             Explore
           </span>
@@ -32,7 +39,7 @@ const MenuWrapper = ({ categoryList, productList }) => {
             Discover our handcrafted dishes, prepared fresh with premium
             ingredients and served with love
           </p>
-        </div>
+        </motion.div>
 
         {/* Category Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
@@ -56,14 +63,28 @@ const MenuWrapper = ({ categoryList, productList }) => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {filter.length > 0 &&
-            filter
-              .slice(0, productLimit)
-              .map((product) => (
-                <MenuItem key={product._id} product={product} />
-              ))}
-        </div>
+        <motion.div 
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"
+        >
+          <AnimatePresence>
+            {filter.length > 0 &&
+              filter
+                .slice(0, productLimit)
+                .map((product) => (
+                  <motion.div
+                    key={product._id}
+                    layout // Animate layout changes smoothly
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <MenuItem product={product} />
+                  </motion.div>
+                ))}
+          </AnimatePresence>
+        </motion.div>
 
         {/* Empty State */}
         {filter.length === 0 && (

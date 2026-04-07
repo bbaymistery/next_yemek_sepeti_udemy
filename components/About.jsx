@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Title from "./ui/Title";
 import { FaUtensils, FaTruck, FaStar } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const About = () => {
   return (
@@ -22,7 +23,12 @@ const About = () => {
       <div className="container mx-auto relative z-10 px-4 xl:px-0 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Text Content */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
             <span className="inline-block text-primary text-sm font-bold uppercase tracking-[0.2em] mb-4">
               About Us
             </span>
@@ -43,12 +49,27 @@ const About = () => {
             <button className="btn-primary text-base px-10 py-3 rounded-full font-semibold hover:-translate-y-0.5 transition-all duration-200 shadow-lg shadow-primary/25">
               Read More
             </button>
-          </div>
+          </motion.div>
 
           {/* Right: Feature Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { 
+                opacity: 1,
+                transition: { staggerChildren: 0.2 }
+              }
+            }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
             {/* Card 1 */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 group">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 group"
+            >
               <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
                 <FaUtensils className="text-primary" size={20} />
               </div>
@@ -56,10 +77,13 @@ const About = () => {
               <p className="text-gray-400 text-sm leading-relaxed">
                 Premium ingredients sourced daily from trusted local suppliers.
               </p>
-            </div>
+            </motion.div>
 
             {/* Card 2 */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 group">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 group"
+            >
               <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
                 <FaTruck className="text-primary" size={20} />
               </div>
@@ -67,10 +91,13 @@ const About = () => {
               <p className="text-gray-400 text-sm leading-relaxed">
                 Hot meals delivered to your door in 30 minutes or less.
               </p>
-            </div>
+            </motion.div>
 
             {/* Card 3 - spans full width */}
-            <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 sm:col-span-2 group">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 sm:col-span-2 group"
+            >
               <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
                 <FaStar className="text-primary" size={20} />
               </div>
@@ -78,8 +105,8 @@ const About = () => {
               <p className="text-gray-400 text-sm leading-relaxed">
                 Award-winning recipes crafted by our expert chefs with love and care for every customer.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

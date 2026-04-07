@@ -1,10 +1,17 @@
 import Image from "next/image";
 import Title from "./ui/Title";
 import { MdShoppingCart } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const CampaignItem = ({ image, title, discount, subtitle, buttonText }) => {
   return (
-    <div className="bg-secondary flex-1 rounded-2xl py-8 px-6 flex flex-col md:flex-row items-center gap-6 shadow-2xl relative overflow-hidden group">
+    <motion.div 
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
+      className="bg-secondary flex-1 rounded-2xl py-8 px-6 flex flex-col md:flex-row items-center gap-6 shadow-2xl relative overflow-hidden group"
+    >
       {/* Premium accent flair */}
       <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[80px] -z-0 pointer-events-none transition-transform duration-700 group-hover:scale-150"></div>
       
@@ -32,7 +39,7 @@ const CampaignItem = ({ image, title, discount, subtitle, buttonText }) => {
           {buttonText} <MdShoppingCart size={20} />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -41,15 +48,21 @@ const Campaigns = () => {
     <section className="w-full bg-[#f8f9fa] py-16 border-y border-gray-200/50">
       <div className="container mx-auto px-4 xl:px-0">
         {/* Stunning Section Title */}
-        <div className="text-center mb-12 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 flex flex-col items-center"
+        >
           <Title addClass="text-5xl font-extrabold text-secondary drop-shadow-sm tracking-tight mb-3">
             Special Offers
           </Title>
           <div className="w-24 h-1 bg-primary rounded-full mb-4"></div>
           <p className="text-gray-500 text-lg font-medium max-w-lg">
-            Savor the flavors with our exclusive limited-time deals! Grab them before they're gone.
+            Savor the flavors with our exclusive limited-time deals! Grab them before they&apos;re gone.
           </p>
-        </div>
+        </motion.div>
 
         {/* Campaign Cards */}
         <div className="flex justify-between gap-8 flex-col lg:flex-row">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Title from "./ui/Title";
 import Slider from "react-slick";
+import { motion } from "framer-motion";
 
 const Carousel = () => {
   const settings = {
@@ -37,21 +38,33 @@ const Carousel = () => {
       </div>
       <Slider {...settings}>
         <div>
-          <div className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10"
+          >
             <Title addClass="text-5xl sm:text-6xl font-bold tracking-wide drop-shadow-md">Taste the Perfection</Title>
             <p className="text-sm sm:text-lg sm:w-2/5 w-full leading-relaxed font-medium drop-shadow-sm text-gray-200">
               Experience the ultimate blend of flavors with our handcrafted burgers,
               crispy fries, and refreshing beverages. Made daily with fresh, locally
               sourced ingredients to deliver a premium dining experience that you
-              simply won't forget.
+              simply won&apos;t forget.
             </p>
             <button className="btn-primary rounded-full px-8 py-3 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               Order Now
             </button>
-          </div>
+          </motion.div>
         </div>
         <div>
-          <div className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-48 container mx-auto text-white flex flex-col items-start gap-y-8 px-4 sm:px-0 relative z-10"
+          >
             <Title addClass="text-5xl sm:text-6xl font-bold tracking-wide drop-shadow-md">Fresh & Delicious</Title>
             <p className="text-sm sm:text-lg sm:w-2/5 w-full leading-relaxed font-medium drop-shadow-sm text-gray-200">
               We believe in serving food that not only tastes incredible but is made
@@ -61,7 +74,7 @@ const Carousel = () => {
             <button className="btn-primary rounded-full px-8 py-3 text-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               Order Now
             </button>
-          </div>
+          </motion.div>
         </div>
       </Slider>
     </div>

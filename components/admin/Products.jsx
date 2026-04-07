@@ -43,7 +43,7 @@ const Products = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Title addClass="text-[40px] text-gray-800">Products Inventory</Title>
-          <p className="text-gray-500 mt-1">Manage your restaurant's menu items.</p>
+          <p className="text-gray-500 mt-1">Manage your restaurant&apos;s menu items.</p>
         </div>
       </div>
       

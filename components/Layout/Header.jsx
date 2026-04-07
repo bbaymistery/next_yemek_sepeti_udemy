@@ -66,7 +66,7 @@ const Header = () => {
           <button onClick={() => setIsSearchModal(true)} className="text-white hover:text-primary transition-colors">
             <FaSearch size={18} />
           </button>
-          <a href="#" className="md:inline-block hidden">
+          <a href="/menu" className="md:inline-block hidden">
             <button className="btn-primary rounded-full px-6 py-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-semibold">
               Order Online
             </button>

@@ -5,6 +5,16 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com"],
   },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Lighthouse'a takılan o polyfill dosyalarını tamamen iptal ediyoruz
+      '../build/polyfills/polyfill-module': false,
+      'next/dist/build/polyfills/polyfill-module': false,
+    };
+
+    return config;
+  },
 };
 
 module.exports = nextConfig;

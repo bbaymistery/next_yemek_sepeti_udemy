@@ -132,7 +132,7 @@ const Cart = ({ userList }) => {
                    </div>
                  </div>
                  <h3 className="text-4xl font-black text-gray-800 mb-5 tracking-tight">Your cart is feeling lonely</h3>
-                 <p className="text-gray-500 max-w-md text-lg mb-10 leading-relaxed font-medium">It looks like you haven't added any delicious food to your cart yet. Let's fix that!</p>
+                 <p className="text-gray-500 max-w-md text-lg mb-10 leading-relaxed font-medium">It looks like you haven&apos;t added any delicious food to your cart yet. Let&apos;s fix that!</p>
                  <button onClick={() => router.push('/menu')} className="px-12 py-5 text-xl rounded-2xl bg-primary text-white font-bold hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(200,20,20,0.2)] transition-all duration-300">
                    Discover Menu
                  </button>
