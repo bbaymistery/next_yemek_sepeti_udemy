@@ -1,5 +1,6 @@
 import Order from "../../../models/Order";
 import dbConnect from "../../../util/dbConnect";
+import { orderValidationSchema } from "../../../schema/validations";
 
 const handler = async (req, res) => {
   await dbConnect();
@@ -15,6 +16,13 @@ const handler = async (req, res) => {
   }
 
   if (method === "POST") {
+    try {
+      orderValidationSchema.parse(req.body);
+    } catch (error) {
+      res.status(400).json({ message: "Validation error", errors: error.errors });
+      return;
+    }
+
     try {
       const newOrder = await Order.create(req.body);
       res.status(201).json(newOrder);

@@ -1,10 +1,20 @@
 import User from "../../../models/User";
 import dbConnect from "../../../util/dbConnect";
 import bcrypt from "bcryptjs";
+import { userValidationSchema } from "../../../schema/validations";
 
 const handler = async (req, res) => {
   await dbConnect();
   const body = req.body;
+
+  // Validate request body
+  try {
+    userValidationSchema.parse(body);
+  } catch (error) {
+    res.status(400).json({ message: "Validation error", errors: error.errors });
+    return;
+  }
+
   const user = await User.findOne({ email: body.email });
   if (user) {
     res.status(400).json({ message: "User already exists" });

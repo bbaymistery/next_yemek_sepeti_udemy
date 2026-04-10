@@ -1,5 +1,6 @@
 import Order from "../../../models/Order";
 import dbConnect from "../../../util/dbConnect";
+import { orderValidationSchema } from "../../../schema/validations";
 
 const handler = async (req, res) => {
   await dbConnect();
@@ -27,6 +28,13 @@ const handler = async (req, res) => {
   }
 
   if (method === "PUT") {
+    try {
+      orderValidationSchema.partial().parse(req.body);
+    } catch (error) {
+      res.status(400).json({ message: "Validation error", errors: error.errors });
+      return;
+    }
+
     try {
       const order = await Order.findByIdAndUpdate(id, req.body, {
         new: true,

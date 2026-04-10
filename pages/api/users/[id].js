@@ -1,5 +1,6 @@
 import User from "../../../models/User";
 import dbConnect from "../../../util/dbConnect";
+import { userValidationSchema } from "../../../schema/validations";
 import bcrypt from "bcryptjs";
 
 const handler = async (req, res) => {
@@ -19,6 +20,13 @@ const handler = async (req, res) => {
   }
 
   if (method === "PUT") {
+    try {
+      userValidationSchema.partial().parse(req.body);
+    } catch (error) {
+      res.status(400).json({ message: "Validation error", errors: error.errors });
+      return;
+    }
+
     try {
       if (req.body.password) {
         req.body.password = await bcrypt.hash(req.body.password, 10);

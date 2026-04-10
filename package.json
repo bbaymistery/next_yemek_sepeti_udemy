@@ -30,7 +30,8 @@
     "react-spinners": "^0.13.4",
     "react-toastify": "^9.0.8",
     "slick-carousel": "^1.8.1",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.8",

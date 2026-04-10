@@ -17,6 +17,12 @@ This document outlines an ordered, step-by-step roadmap to upgrade the `yemek_Se
 - Added fade-in and slide-up animations to the Hero component, About section, and Campaigns.
 - Added smooth stagger effects to the product lists and carousel slides.
 
+### Step 1.5: Input Validation with Zod - *[COMPLETED]*
+**Goal:** Prevent invalid or malicious data from reaching the database.
+- Installed `zod`.
+- Created robust schemas (`user`, `product`, `category`, `order`) inside `/schema/validations.js`.
+- Implemented Zod validation in POST/PUT API route handlers before executing database operations.
+
 ### Step 2: Robust Admin Authentication
 **Goal:** Secure and manage admins properly through the database.
 - Update the `User` DB model to include a `role` field (`"user"` or `"admin"`).
