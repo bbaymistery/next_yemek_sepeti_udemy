@@ -1,80 +1,143 @@
-# Yemek Sepeti (Udemy) Backend API Mimarisi 🚀
+# Yemek Sepeti — Backend API Mimarisi 🚀
 
 Bu doküman projemizdeki Backend Mimarisinin (**Next.js API Routes**) nasıl organize edildiğini, hangi API'lerin ne işe yaradığını ve nasıl birbirine bağlandıklarını açıklar.
 
+---
+
 ## 📌 Genel Standartlar ve Akış
 
-Projede kullanılan tüm API uçları (endpoints) ortak ve güvenli bir düzene oturtulmuştur:
-1. **Veritabanı Bağlantısı**: Her API `await dbConnect()` ile çalışır.
-2. **Hata Yakalama (Global Error Handler)**: Önceden dağınık olan `console.log(err)` vb. satırlar kaldırılarak tek merkezli bir `/util/errorHandler.js` dosyasına bağlandı. Hatalarda daima standart `success: false` ve `message` dönülür.
-3. **Veri Doğrulama (Zod Validation)**: POST ve PUT gibi veri yazma/güncelleme işlemlerinin tamamında gelen veriler Zod ile doğrulanır (örn. Şifre formatı, ismin var olup olmadığı). Başarısız olursa Error Handler sayesinde net hata metinleri gösterilir.
+Tüm API uçları aşağıdaki ortak katmanlara sahiptir:
+
+| Katman | Açıklama |
+|---|---|
+| **Veritabanı** | Her API `await dbConnect()` ile çalışır |
+| **Hata Yakalama** | Merkezi `util/errorHandler.js` — her hatada `{ success: false, message }` döner |
+| **Veri Doğrulama** | POST/PUT işlemlerinde `Zod` ile gelen veri doğrulanır. Hatalı format → 400 + detaylı mesaj |
+| **Kimlik & Rol** | NextAuth `jwt` + `session` callback'leri ile `session.user.role` taşınır |
+| **Middleware** | `middleware.js` — `/profile/*` ve `/admin/profile/*` için giriş + rol kontrolü yapar |
 
 ---
 
-## 📂 API Dosya Ağacı ve Görevleri
+## 🔐 Kimlik Doğrulama & Yetkilendirme Sistemi
 
-Bağlantı noktalarının tamamı `pages/api/` altında yer alır:
+### Nasıl Çalışır?
+Sistemde **tek giriş noktası** vardır: `/auth/login`
 
-### 👤 1. Kullanıcılar (Users) Modülü
-**/api/users/...**
+Kullanıcı giriş yaptıktan sonra sistem `session.user.role` değerine bakarak yönlendirir:
 
-- **`GET /api/users`** 
-  - **Ne Yapar?** Sistemdeki tüm kayıtlı kullanıcıları getirir. 
-  - **Kullanım Yeri:** İleride yazılacak Admin panelinde "Kullanıcılar" listesinde kullanılır.
+```
+role: "user"  → /profile/[id]     (Müşteri profili)
+role: "admin" → /admin/profile    (Admin paneli)
+```
 
-- **`POST /api/users`**
-  - **Ne Yapar?** Arka planda şifre hashlama olmadan hızlıca bir "taslak" kullanıcı oluşturmak istendiğimizde (genellikle Admin özel işlemlerinde) kullanılır.
-  
-- **`POST /api/users/register`** 
-  - **Ne Yapar?** Sadece dışarıdan üye olmak isteyen standart **Müşteriler** içindir. Frontend kısmında Üye Kayıt (Register) Formu gönderildiğinde bu API çalışır. Gelen `password` doğrudan kaydedilmez, güvenli bir "bcrypt hash" ile kriptolanıp veritabanına eklenir. Ayrıca iki kere üst üste form gönderimlerinde e-mail bazlı Race Condition oluşmasın diye veritabanı seviyesinde `unique: true` korumasına sahiptir.
+### Admin Nasıl Belirlenir?
+Admin hesabı özel bir kayıt sayfasıyla oluşturulmaz.  
+**Best Practice:** Normal kullanıcı gibi kayıt olunur, ardından tek seferlik script çalıştırılır:
 
-- **`GET /api/users/[id]`**
-  - **Ne Yapar?** Tek bir kullanıcının (Profil sayfasındaki detayları vs.) bilgilerine erişmek için çalışır.
+```bash
+node scripts/make-admin.js elgun.ezmemmedov@mail.ru
+```
 
-- **`PUT /api/users/[id]`**
-  - **Ne Yapar?** Kullanıcı, "Profilimi Güncelle" sayfasına gidip şifresini/adını vs değiştirdiğinde çalışır.
+Ya da MongoDB Atlas üzerinden ilgili kullanıcının `role` alanı `"admin"` olarak güncellenir.
 
----
-
-### 🍔 2. Ürünler (Products) Modülü
-**/api/products/...**
-
-- **`GET /api/products`**
-  - **Ne Yapar?** Restoranın menüsündeki ürünleri getirir (Anasayfa veya Menü sayfası).
-
-- **`POST /api/products`**
-  - **Ne Yapar?** Yeni bir burger veya menü ürünü eklendiğinde çalışır (Sadece Admin yetkilileri ileride erişebilecektir). Zod ile ürün fiyatının `string` yerine `number` formatında girilmesi gerektiği denetlenir.
-
-- **`GET /api/products/[id]`**
-  - **Ne Yapar?** Bir ürünün detayına tıklandığında, sepete eklerken ürün fiyatı, ek malzemeleri (peynir, ketçap vb) ve resminin yüklenmesi için çalışır.
-
-- **`DELETE /api/products/[id]`**
-  - **Ne Yapar?** Bir ürünü sistemden ve menüden temelli silmek için kullanılır.
+### Korunan Sayfalar (Middleware)
+| Sayfa | Kim Erişebilir |
+|---|---|
+| `/profile/*` | Giriş yapmış herkes |
+| `/admin/profile/*` | Sadece `role: "admin"` olan kullanıcı |
 
 ---
 
-### 🛒 3. Kategoriler (Categories) Modülü
-**/api/categories/...**
+## 📂 API Endpoint Listesi
 
-- **`GET /api/categories`**
-  - **Ne Yapar?** Menüde ürün filtremesini sağlayan başlıkları (Burger, Pizza, İçecek) listeler.
-- **`POST /api/categories`**
-  - **Ne Yapar?** Menüye yeni bir kategori ("Tatlılar" vb.) ekler (Zod ile adı zorunlu kılınmıştır).
+### 👤 1. Kullanıcılar (Users) — `/api/users/`
 
----
+| Method | Endpoint | Açıklama | Erişim |
+|---|---|---|---|
+| `GET` | `/api/users` | Tüm kullanıcıları listeler | Açık |
+| `POST` | `/api/users` | Ham kullanıcı oluşturur (bcrypt yok) | Açık |
+| `POST` | `/api/users/register` | Müşteri kaydı — şifre bcrypt ile hashlenir | Açık |
+| `GET` | `/api/users/[id]` | Tek kullanıcı detayı | Açık |
+| `PUT` | `/api/users/[id]` | Profil güncelleme — Zod doğrulamalı | Açık |
 
-### 🧾 4. Siparişler (Orders) Modülü
-**/api/orders/...**
-
-- **`GET /api/orders`**
-  - **Ne Yapar?** Müşterilerin verdiği veya sonlanmış tüm siparişleri Admin paneli için getirir.
-- **`POST /api/orders`**
-  - **Ne Yapar?** Müşteri sepette ürünleri seçip "Siparişi Tamamla" dediğinde tetiklenir. Zod ile toplam ücret ve sipariş eden kişinin adres/kimlik onayı doğrulanır.
-
-- **`GET /api/orders/[id]`** 
-  - **Ne Yapar?** Müşteriye "Sipariş Takibi" yapabilmesi için tek bir faturanın durumunu (`Hazırlanıyor`, `Yolda` vb.) listeler.
+> **Not:** `/api/users` POST ile `/api/users/register` POST farkı:  
+> `register` → Müşteri kayıt formu, bcrypt hash, Zod validasyon  
+> `users POST` → Admin taraflı ham ekleme (ileride admin token ile korunacak)
 
 ---
 
-### 🏗️ Notlar ve Gelecek Geliştirmeler
-Tüm bu API uçlarında **Error Handler** yapısı kusursuz bağlanmıştır. Geliştirme aşamasında olduğumuz için Postman üzerinden istek atıp test edilirken şimdilik her şey açık haldedir ancak yakında **Authentication (Giriş/Kimlik Doğrulaması)** ve **Authorization (Yetkilendirme)** ile bu CRUD işlemleri (özellikle POST ve DELETE olanlar) özel Next-Auth koruma katmanlarının arkasına alınacaktır.
+### 🍔 2. Ürünler (Products) — `/api/products/`
+
+| Method | Endpoint | Açıklama | Erişim |
+|---|---|---|---|
+| `GET` | `/api/products` | Tüm menü ürünlerini getirir | Açık |
+| `POST` | `/api/products` | Yeni ürün ekler — Zod doğrulamalı | 🔒 İleride Admin only |
+| `GET` | `/api/products/[id]` | Tek ürün detayı (sepet, ürün sayfası) | Açık |
+| `DELETE` | `/api/products/[id]` | Ürün siler | 🔒 İleride Admin only |
+
+---
+
+### 🛒 3. Kategoriler (Categories) — `/api/categories/`
+
+| Method | Endpoint | Açıklama | Erişim |
+|---|---|---|---|
+| `GET` | `/api/categories` | Tüm kategorileri listeler (Burger, Pizza…) | Açık |
+| `POST` | `/api/categories` | Yeni kategori ekler — Zod doğrulamalı | 🔒 İleride Admin only |
+
+---
+
+### 🧾 4. Siparişler (Orders) — `/api/orders/`
+
+| Method | Endpoint | Açıklama | Erişim |
+|---|---|---|---|
+| `GET` | `/api/orders` | Tüm siparişleri listeler (Admin paneli için) | Açık |
+| `POST` | `/api/orders` | Sipariş oluşturur — Zod doğrulamalı | Açık |
+| `GET` | `/api/orders/[id]` | Tek sipariş detayı (takip ekranı) | Açık |
+| `PUT` | `/api/orders/[id]` | Sipariş durumunu günceller (Hazırlanıyor → Yolda) | 🔒 İleride Admin only |
+
+---
+
+### ~~🔒 5. Admin Auth — `/api/admin/` (Kaldırıldı)~~
+
+> ❌ Bu endpoint artık **kullanılmıyor**. `410 Gone` döner.  
+> Eski sistem: statik `ADMIN_TOKEN` cookie ile giriş.  
+> Yeni sistem: NextAuth session + `role: "admin"` ile tamamen entegre edildi.
+
+---
+
+## 🗂️ Proje Dosya Yapısı
+
+```
+pages/api/
+├── auth/
+│   └── [...nextauth].js    ← NextAuth: JWT callbacks + rol sistemi
+├── users/
+│   ├── index.js            ← GET (liste) / POST (ham oluştur)
+│   ├── register.js         ← POST (müşteri kayıt, bcrypt)
+│   └── [id].js             ← GET / PUT (profil)
+├── products/
+│   ├── index.js            ← GET / POST
+│   └── [id].js             ← GET / DELETE
+├── categories/
+│   └── index.js            ← GET / POST
+├── orders/
+│   ├── index.js            ← GET / POST
+│   └── [id].js             ← GET / PUT
+└── admin/
+    └── index.js            ← ❌ Kaldırıldı, 410 döner
+
+middleware.js               ← Route koruması (giriş + rol kontrolü)
+util/errorHandler.js        ← Merkezi hata yönetimi
+util/dbConnect.js           ← MongoDB bağlantısı
+schema/validations.js       ← Tüm Zod şemaları
+models/                     ← Mongoose modelleri (User, Product, Category, Order)
+scripts/make-admin.js       ← İlk admin atama scripti
+```
+
+---
+
+## 🏗️ Gelecek Geliştirmeler
+
+- [ ] `POST /api/products`, `DELETE /api/products/[id]`, `POST /api/categories`, `PUT /api/orders/[id]` endpoint'leri `getServerSession` ile admin rolü kontrolüne alınacak
+- [ ] `GET /api/orders` admin-only yapılacak
+- [ ] Rate limiting eklenecek (çok fazla istek koruması)

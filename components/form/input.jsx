@@ -8,9 +8,9 @@ const Input = (props) => {
       <label className="relative block cursor-text w-full">
         <input
           type={type}
-          className={`h-14 w-full border rounded-xl outline-none px-4 peer pt-2 text-sm bg-transparent
-          ${touched && errorMessage ? "border-red-500" : "border-gray-200 focus:border-primary"}
-          transition-colors duration-200
+          className={`h-14 w-full border rounded-xl outline-none px-4 peer pt-2 text-sm bg-white/50 backdrop-blur-sm
+          ${touched && errorMessage ? "border-red-500 ring-2 ring-red-100" : "border-gray-100 focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm"}
+          transition-all duration-300 hover:border-gray-300
           `}
           required
           placeholder=" "

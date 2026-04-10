@@ -2,6 +2,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { signOut, getSession } from "next-auth/react";
 import Category from "../../components/admin/Category";
 import Footer from "../../components/admin/Footer";
 import Order from "../../components/admin/Order";
@@ -17,22 +18,15 @@ import {
   FaPlus,
 } from "react-icons/fa";
 
-const Profile = () => {
+const Profile = ({ adminName }) => {
   const [tabs, setTabs] = useState(0);
   const [isProductModal, setIsProductModal] = useState(false);
   const { push } = useRouter();
 
   const closeAdminAccount = async () => {
-    try {
-      if (confirm("Are you sure you want to close your Admin Account?")) {
-        const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
-        if (res.status === 200) {
-          push("/admin");
-          toast.success("Admin Account Closed!");
-        }
-      }
-    } catch (err) {
-      console.log(err);
+    if (confirm("Admin panelinden çıkış yapmak istediğinize emin misiniz?")) {
+      await signOut({ callbackUrl: "/" });
+      toast.success("Çıkış yapıldı.");
     }
   };
 
@@ -62,7 +56,7 @@ const Profile = () => {
             />
           </div>
           <h2 className="text-2xl font-extrabold text-gray-800 tracking-tight">
-            Admin Panel
+             {adminName || "Admin Panel"}
           </h2>
           <span className="mt-2 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold uppercase rounded-full tracking-wider">
             Online
@@ -107,8 +101,6 @@ const Profile = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 bg-gray-50 p-6 lg:p-12 relative overflow-x-hidden">
-        {/* Dynamic Header Section based on active tab can be placed inside the components themselves 
-            but the overall container will provide the premium canvas */}
         <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/40 border border-gray-100/60 p-8 lg:p-12 min-h-full transition-all duration-500">
           {tabs === 0 && <Products />}
           {tabs === 1 && <Order />}
@@ -117,8 +109,8 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Floating Action Button for Products (Global Context) */}
-      {tabs === 0 && ( /* Only show + button on Products tab for better UX UX */
+      {/* Floating Action Button for Products */}
+      {tabs === 0 && (
         <button
           onClick={() => setIsProductModal(true)}
           className="fixed bottom-10 right-10 z-50 w-16 h-16 bg-primary text-secondary rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/50 hover:-translate-y-2 hover:bg-primary/90 transition-all duration-300 group overflow-hidden"
@@ -134,20 +126,26 @@ const Profile = () => {
   );
 };
 
-export const getServerSideProps = (ctx) => {
-  const myCookie = ctx.req?.cookies || "";
-  if (myCookie.token !== process.env.ADMIN_TOKEN) {
+export async function getServerSideProps(context) {
+  // getServerSession import probleminden dolayı en garantili yöntem olan getSession kullanıldı.
+  const session = await getSession(context);
+
+  // Oturum yoksa veya admin değilse → ana sayfaya gönder
+  if (!session || session.user.role !== "admin") {
     return {
       redirect: {
-        destination: "/admin",
+        destination: "/",
         permanent: false,
       },
     };
   }
 
   return {
-    props: {},
+    props: {
+      adminName: session.user.name || "Admin",
+      adminEmail: session.user.email,
+    },
   };
-};
+}
 
 export default Profile;
