@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Product from "../../../models/Product";
 import dbConnect from "../../../util/dbConnect";
 import { productValidationSchema } from "../../../schema/validations";
@@ -11,7 +12,7 @@ const handler = async (req, res) => {
       const products = await Product.find();
       res.status(200).json(products);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -19,15 +20,16 @@ const handler = async (req, res) => {
     try {
       productValidationSchema.parse(req.body);
     } catch (error) {
-      res.status(400).json({ message: "Validation error", errors: error.errors });
-      return;
+      error.statusCode = 400;
+      error.message = (error.issues || error.errors || []).map(e => e.message).join(" | ");
+      return errorHandler(res, error);
     }
 
     try {
       const newProduct = await Product.create(req.body);
       res.status(201).json(newProduct);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 };

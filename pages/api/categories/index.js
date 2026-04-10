@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Category from "../../../models/Category";
 import dbConnect from "../../../util/dbConnect";
 import { categoryValidationSchema } from "../../../schema/validations";
@@ -11,7 +12,7 @@ const handler = async (req, res) => {
       const categories = await Category.find();
       res.status(200).json(categories);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -19,15 +20,16 @@ const handler = async (req, res) => {
     try {
       categoryValidationSchema.parse(req.body);
     } catch (error) {
-      res.status(400).json({ message: "Validation error", errors: error.errors });
-      return;
+      error.statusCode = 400;
+      error.message = (error.issues || error.errors || []).map(e => e.message).join(" | ");
+      return errorHandler(res, error);
     }
 
     try {
       const newCategory = await Category.create(req.body);
       res.status(200).json(newCategory);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 };

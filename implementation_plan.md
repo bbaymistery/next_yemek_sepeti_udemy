@@ -23,6 +23,12 @@ This document outlines an ordered, step-by-step roadmap to upgrade the `yemek_Se
 - Created robust schemas (`user`, `product`, `category`, `order`) inside `/schema/validations.js`.
 - Implemented Zod validation in POST/PUT API route handlers before executing database operations.
 
+### Step 1.6: Centralized Error Handling - *[COMPLETED]*
+**Goal:** Provide standard error messages and avoid raw `console.log(err)` across API routes.
+- Created `util/errorHandler.js` utility.
+- Refactored 11 API route endpoints (`users`, `products`, `orders`, `categories`, `footer`) to universally use this error wrapper.
+- All errors now return a consistent JSON format with status codes.
+
 ### Step 2: Robust Admin Authentication
 **Goal:** Secure and manage admins properly through the database.
 - Update the `User` DB model to include a `role` field (`"user"` or `"admin"`).

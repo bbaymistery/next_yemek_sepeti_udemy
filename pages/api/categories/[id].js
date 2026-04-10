@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Category from "../../../models/Category";
 import dbConnect from "../../../util/dbConnect";
 
@@ -13,7 +14,7 @@ const handler = async (req, res) => {
       const category = await Category.findById(id);
       res.status(200).json(category);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -22,7 +23,7 @@ const handler = async (req, res) => {
       const category = await Category.findByIdAndDelete(id);
       res.status(200).json(category);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 };

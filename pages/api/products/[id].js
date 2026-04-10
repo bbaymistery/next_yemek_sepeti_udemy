@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Product from "../../../models/Product";
 import dbConnect from "../../../util/dbConnect";
 
@@ -13,7 +14,7 @@ const handler = async (req, res) => {
       const product = await Product.findById(id);
       res.status(200).json(product);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -22,7 +23,7 @@ const handler = async (req, res) => {
       const product = await Product.findByIdAndDelete(id);
       res.status(200).json(product);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 };

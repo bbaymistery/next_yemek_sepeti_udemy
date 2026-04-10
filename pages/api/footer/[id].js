@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Footer from "../../../models/Footer";
 import dbConnect from "../../../util/dbConnect";
 
@@ -20,7 +21,7 @@ const handler = async (req, res) => {
 
         return res.status(200).json(updatedFooter);
       } catch (err) {
-        console.log(err);
+        errorHandler(res, err);
         return res.status(500).json({ message: "Footer could not be updated." });
       }
 
@@ -34,7 +35,7 @@ const handler = async (req, res) => {
 
         return res.status(200).json({ message: "Footer deleted successfully" });
       } catch (err) {
-        console.log(err);
+        errorHandler(res, err);
         return res.status(500).json({ message: "Footer could not be deleted." });
       }
 

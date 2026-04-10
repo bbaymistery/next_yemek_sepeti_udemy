@@ -94,7 +94,11 @@ const Register = () => {
           ))}
         </div>
         <div className="flex flex-col w-full gap-y-3 mt-6">
-          <button className="btn-primary" type="submit">
+          <button 
+            className="btn-primary" 
+            type="submit" 
+            disabled={Object.keys(touched).length > 0 && Object.keys(errors).length > 0}
+          >
             REGISTER
           </button>
           <Link href="/auth/login">

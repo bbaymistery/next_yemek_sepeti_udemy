@@ -1,3 +1,4 @@
+import { errorHandler } from '../../../util/errorHandler';
 import Order from "../../../models/Order";
 import dbConnect from "../../../util/dbConnect";
 import { orderValidationSchema } from "../../../schema/validations";
@@ -14,7 +15,7 @@ const handler = async (req, res) => {
       const order = await Order.findById(id);
       res.status(200).json(order);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -23,7 +24,7 @@ const handler = async (req, res) => {
       const order = await Order.findByIdAndDelete(id);
       res.status(200).json(order);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 
@@ -31,8 +32,9 @@ const handler = async (req, res) => {
     try {
       orderValidationSchema.partial().parse(req.body);
     } catch (error) {
-      res.status(400).json({ message: "Validation error", errors: error.errors });
-      return;
+      error.statusCode = 400;
+      error.message = (error.issues || error.errors || []).map(e => e.message).join(" | ");
+      return errorHandler(res, error);
     }
 
     try {
@@ -41,7 +43,7 @@ const handler = async (req, res) => {
       });
       res.status(200).json(order);
     } catch (err) {
-      console.log(err);
+      errorHandler(res, err);
     }
   }
 };
