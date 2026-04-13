@@ -141,3 +141,22 @@ scripts/make-admin.js       ← İlk admin atama scripti
 - [ ] `POST /api/products`, `DELETE /api/products/[id]`, `POST /api/categories`, `PUT /api/orders/[id]` endpoint'leri `getServerSession` ile admin rolü kontrolüne alınacak
 - [ ] `GET /api/orders` admin-only yapılacak
 - [ ] Rate limiting eklenecek (çok fazla istek koruması)
+
+---
+
+## 🚀 Son Yapılan Geliştirmeler (Günün Özeti)
+
+### 1. Zod ile Profil Güncelleme Hataları Giderildi
+- Kullanıcı güncelleme endpoint'indeki `.partial()` ve `.refine()` çakışması (Zod'un `.partial() cannot be used on object schemas containing refinements` hatası) çözüldü.
+- Sorunu çözmek için `schema/validations.js` dosyası 3 katmana ayrıldı:
+  1. `baseUserSchema` (Ortak alanlar)
+  2. `userValidationSchema` (Kayıt aşaması için tam doğrulamalı)
+  3. `userUpdateValidationSchema` (Profil güncellemesi için partial olan)
+
+### 2. Veritabanı Optimizasyonu
+- Mongoose modeli (`models/User.js`) içerisinden `confirmPassword` alanı kaldırıldı. Güvenlik ve veri temizliği açısından bu değerin sadece sunucu tarafı onayında (Zod içinde) tutulup, veritabanına kaydedilmemesi sağlandı.
+
+### 3. Kullanıcı Deneyimi ve Sayfa Hız Optimizasyonları
+- Next.js 12 router mimarisine uygun olarak menü içindeki (Header, Logo, vb.) saf `<a>` etiketleri tam SPA uyumlu `<Link>` elementleriyle sarmallandı. 
+- SPA özelliklerinin kırılması nedeniyle oluşan "sayfalar arası geçişlerde çok uzun sürme" problemi tamamen yok edildi.
+- `getServerSideProps` içerisindeki (Ana Sayfa ve Menü sayfalarında) `axios.get` istekleri ardışık çalışmaktan kurtarılıp **`Promise.all`** ile asenkron ve paralel çalışır duruma getirildi. Sunucu taraflı hız yarı yarıya arttırıldı.
