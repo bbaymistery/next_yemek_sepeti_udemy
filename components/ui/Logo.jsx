@@ -2,10 +2,12 @@ import Link from "next/link";
 
 const Logo = () => {
   return (
-    <Link href="/">
-      <span className="text-[2rem] font-dancing font-bold cursor-pointer">
-        Feane
-      </span>
+    <Link href="/" passHref>
+      <a>
+        <span className="text-[2rem] font-dancing font-bold cursor-pointer">
+          Feane
+        </span>
+      </a>
     </Link>
   );
 };

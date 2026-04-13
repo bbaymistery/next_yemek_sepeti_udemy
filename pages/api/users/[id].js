@@ -1,7 +1,7 @@
 import { errorHandler } from '../../../util/errorHandler';
 import User from "../../../models/User";
 import dbConnect from "../../../util/dbConnect";
-import { userValidationSchema } from "../../../schema/validations";
+import { userValidationSchema, userUpdateValidationSchema } from "../../../schema/validations";
 import bcrypt from "bcryptjs";
 
 const handler = async (req, res) => {
@@ -22,8 +22,10 @@ const handler = async (req, res) => {
 
   if (method === "PUT") {
     try {
-      userValidationSchema.partial().parse(req.body);
+      console.log("Incoming update data:", req.body);
+      userUpdateValidationSchema.parse(req.body);
     } catch (error) {
+      console.log("Zod Validation Error:", error);
       error.statusCode = 400;
       error.message = (error.issues || error.errors || []).map(e => e.message).join(" | ");
       return errorHandler(res, error);
@@ -32,16 +34,16 @@ const handler = async (req, res) => {
     try {
       if (req.body.password) {
         req.body.password = await bcrypt.hash(req.body.password, 10);
-        req.body.confirmPassword = await bcrypt.hash(
-          req.body.confirmPassword,
-          10
-        );
       }
-      const users = await User.findByIdAndUpdate(id, req.body, {
+      
+      delete req.body.confirmPassword;
+
+      const updatedUser = await User.findByIdAndUpdate(id, req.body, {
         new: true,
       });
-      res.status(200).json(users);
+      res.status(200).json(updatedUser);
     } catch (err) {
+      console.log("Database Update Error:", err);
       errorHandler(res, err);
     }
   }

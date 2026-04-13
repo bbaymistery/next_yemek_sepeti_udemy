@@ -30,10 +30,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    confirmPassword: {
-      type: String,
-      required: true,
-    },
+    // confirmPassword alanı veritabanından başarıyla kaldırıldı. 
+    // Sadece kayıt anında doğrulanacak, kaydedilmeyecek.
     emailVerified: {
       type: String,
       default: null,
@@ -53,4 +51,3 @@ if (mongoose.models.User) {
 
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 export default User;
-

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userValidationSchema = z.object({
+const baseUserSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   image: z.string().optional(),
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -10,7 +10,24 @@ export const userValidationSchema = z.object({
   bio: z.string().optional(),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters"),
-}).refine((data) => data.password === data.confirmPassword, {
+});
+
+export const userValidationSchema = baseUserSchema.refine((data) => {
+  if (data.password || data.confirmPassword) {
+    return data.password === data.confirmPassword;
+  }
+  return true;
+}, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export const userUpdateValidationSchema = baseUserSchema.partial().refine((data) => {
+  if (data.password || data.confirmPassword) {
+    return data.password === data.confirmPassword;
+  }
+  return true;
+}, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
 });

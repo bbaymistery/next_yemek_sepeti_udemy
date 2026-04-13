@@ -23,19 +23,19 @@ const Header = () => {
         <nav className="sm:flex hidden flex-1 justify-center z-50">
           <ul className="flex gap-x-8 text-[15px] font-medium uppercase tracking-wider">
             <li className={`relative group cursor-pointer transition-colors ${router.asPath === "/" ? "text-primary" : "text-white hover:text-white/80"}`}>
-              <Link href="/">Home</Link>
+              <Link href="/"><a>Home</a></Link>
               <div className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-300 origin-left ${router.asPath === "/" ? "w-full" : "w-0 group-hover:w-full"}`}></div>
             </li>
             <li className={`relative group cursor-pointer transition-colors ${router.asPath === "/menu" ? "text-primary" : "text-white hover:text-white/80"}`}>
-              <Link href="/menu">Menu</Link>
+              <Link href="/menu"><a>Menu</a></Link>
               <div className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-300 origin-left ${router.asPath === "/menu" ? "w-full" : "w-0 group-hover:w-full"}`}></div>
             </li>
             <li className={`relative group cursor-pointer transition-colors ${router.asPath === "/about" ? "text-primary" : "text-white hover:text-white/80"}`}>
-              <Link href="/about">About</Link>
+              <Link href="/about"><a>About</a></Link>
               <div className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-300 origin-left ${router.asPath === "/about" ? "w-full" : "w-0 group-hover:w-full"}`}></div>
             </li>
             <li className={`relative group cursor-pointer transition-colors ${router.asPath === "/reservation" ? "text-primary" : "text-white hover:text-white/80"}`}>
-              <Link href="/reservation">Book Table</Link>
+              <Link href="/reservation"><a>Book Table</a></Link>
               <div className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-300 origin-left ${router.asPath === "/reservation" ? "w-full" : "w-0 group-hover:w-full"}`}></div>
             </li>
           </ul>
@@ -43,14 +43,14 @@ const Header = () => {
 
         {/* ACTION ICONS & ORDER BUTTON */}
         <div className="flex gap-x-5 items-center">
-          <Link href="/auth/login">
+          <Link href="/auth/login" passHref>
             <span className={`hover:text-primary transition-all cursor-pointer ${
               (router.asPath.includes("profile") || router.asPath.includes("auth")) ? "text-primary" : "text-white"
             }`}>
               <FaUserAlt size={18} />
             </span>
           </Link>
-          <Link href="/cart">
+          <Link href="/cart" passHref>
             <span className="relative">
               <FaShoppingCart
                 className={`hover:text-primary transition-all cursor-pointer ${
@@ -66,11 +66,13 @@ const Header = () => {
           <button onClick={() => setIsSearchModal(true)} className="text-white hover:text-primary transition-colors">
             <FaSearch size={18} />
           </button>
-          <a href="/menu" className="md:inline-block hidden">
-            <button className="btn-primary rounded-full px-6 py-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-semibold">
-              Order Online
-            </button>
-          </a>
+          <Link href="/menu" passHref>
+            <a className="md:inline-block hidden">
+              <button className="btn-primary rounded-full px-6 py-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-semibold">
+                Order Online
+              </button>
+            </a>
+          </Link>
           {/* Hamburger Icon for Mobile */}
           <button
             className="sm:hidden inline-block text-white hover:text-primary transition-colors focus:outline-none"
@@ -108,7 +110,7 @@ const Header = () => {
             }`}
             onClick={() => setIsMenuModal(false)}
           >
-            <Link href="/">Home</Link>
+            <Link href="/"><a>Home</a></Link>
           </li>
           <li
             className={`hover:text-primary transition-colors cursor-pointer ${
@@ -116,7 +118,7 @@ const Header = () => {
             }`}
             onClick={() => setIsMenuModal(false)}
           >
-            <Link href="/menu">Menu</Link>
+            <Link href="/menu"><a>Menu</a></Link>
           </li>
           <li
             className={`hover:text-primary transition-colors cursor-pointer ${
@@ -124,7 +126,7 @@ const Header = () => {
             }`}
             onClick={() => setIsMenuModal(false)}
           >
-            <Link href="/about">About</Link>
+            <Link href="/about"><a>About</a></Link>
           </li>
           <li
             className={`hover:text-primary transition-colors cursor-pointer ${
@@ -132,7 +134,7 @@ const Header = () => {
             }`}
             onClick={() => setIsMenuModal(false)}
           >
-            <Link href="/reservation">Book Table</Link>
+            <Link href="/reservation"><a>Book Table</a></Link>
           </li>
         </ul>
       </nav>

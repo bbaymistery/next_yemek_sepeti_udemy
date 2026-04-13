@@ -11,18 +11,26 @@ const Index = ({ categoryList, productList }) => {
 };
 
 export const getServerSideProps = async () => {
-  const category = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories`
-  );
-  const product = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/products`
-  );
-  return {
-    props: {
-      categoryList: category.data ? category.data : [],
-      productList: product.data ? product.data : [],
-    },
-  };
+  try {
+    const [categoryRes, productRes] = await Promise.all([
+      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`),
+      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    ]);
+
+    return {
+      props: {
+        categoryList: categoryRes.data ? categoryRes.data : [],
+        productList: productRes.data ? productRes.data : [],
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        categoryList: [],
+        productList: [],
+      },
+    };
+  }
 };
 
 export default Index;

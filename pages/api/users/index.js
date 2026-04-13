@@ -26,7 +26,8 @@ const handler = async (req, res) => {
     }
 
     try {
-      const newUser = await User.create(req.body);
+      const { fullName, email, password, image } = req.body;
+      const newUser = await User.create({ fullName, email, password, image });
       res.status(200).json(newUser);
     } catch (err) {
       errorHandler(res, err);
