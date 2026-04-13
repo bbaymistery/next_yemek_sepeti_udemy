@@ -10,6 +10,7 @@ const handler = async (req, res) => {
 
   try {
     // Validate request body
+    console.log("API Received Body:", body);
     userValidationSchema.parse(body);
 
     const user = await User.findOne({ email: body.email });

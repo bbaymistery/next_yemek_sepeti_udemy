@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const userValidationSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
+  image: z.string().optional(),
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   phoneNumber: z.string().optional(),
   address: z.string().optional(),

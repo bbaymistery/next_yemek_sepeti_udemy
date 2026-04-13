@@ -29,11 +29,12 @@ This document outlines an ordered, step-by-step roadmap to upgrade the `yemek_Se
 - Refactored 11 API route endpoints (`users`, `products`, `orders`, `categories`, `footer`) to universally use this error wrapper.
 - All errors now return a consistent JSON format with status codes.
 
-### Step 2: Robust Admin Authentication
+### Step 2: Robust Admin Authentication - *[COMPLETED]*
 **Goal:** Secure and manage admins properly through the database.
-- Update the `User` DB model to include a `role` field (`"user"` or `"admin"`).
-- Refactor the NextAuth configuration and login logic to support admin role checks.
-- Restrict API routes (`pages/api/...`) to ensure only admins can create, update, or delete content.
+- Confirmed `User` DB model includes a `role` field (`"user"` or `"admin"`).
+- Refactored **NextAuth** callbacks to store and provide `role` in the session.
+- Created `util/adminCheck.js` to protect API routes.
+- Logged in users now have persistent roles available on the client and server.
 
 ### Step 3: Dynamic Admin-Managed Carousel (Hero Section) [NEW]
 **Goal:** Make the main sliders (text and images) after the navbar 100% dynamic, controllable from the Admin Panel via API, using best practices.

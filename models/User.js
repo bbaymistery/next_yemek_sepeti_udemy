@@ -6,6 +6,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -44,4 +47,10 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+if (mongoose.models.User) {
+  delete mongoose.models.User;
+}
+
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
+export default User;
+

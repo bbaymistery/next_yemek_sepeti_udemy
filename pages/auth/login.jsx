@@ -9,11 +9,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
+import { useState } from "react";
 
 const Login = () => {
   const { push } = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (values, actions) => {
+    setLoading(true);
     const { email, password } = values;
 
     try {
@@ -25,6 +29,7 @@ const Login = () => {
 
       if (result?.error) {
         toast.error(result.error);
+        setLoading(false);
         return;
       }
 
@@ -45,6 +50,7 @@ const Login = () => {
     } catch (err) {
       toast.error("Giriş sırasında bir hata oluştu.");
       console.error(err);
+      setLoading(false);
     }
   };
 
@@ -133,10 +139,15 @@ const Login = () => {
               className="space-y-3"
             >
               <button 
-                className="w-full h-14 bg-primary text-secondary font-bold rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
+                className="w-full h-14 bg-primary text-secondary font-bold rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 uppercase tracking-wider flex items-center justify-center gap-x-2"
                 type="submit"
+                disabled={loading}
               >
-                Sign In
+                {loading ? (
+                   <div className="w-6 h-6 border-4 border-secondary/30 border-t-secondary rounded-full animate-spin" />
+                ) : (
+                  "Sign In"
+                )}
               </button>
 
               <div className="relative flex items-center py-1">

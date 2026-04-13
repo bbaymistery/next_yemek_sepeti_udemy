@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "ui-avatars.com"],
   },
   webpack: (config) => {
     config.resolve.alias = {

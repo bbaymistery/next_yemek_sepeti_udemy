@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import { profileSchema } from "../../schema/profile";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Account = ({ user }) => {
   const onSubmit = async (values, actions) => {
@@ -17,6 +18,7 @@ const Account = ({ user }) => {
         toast.success("Profile updated successfully");
       }
     } catch (err) {
+      toast.error("Something went wrong!");
       console.log(err);
     }
   };
@@ -25,16 +27,17 @@ const Account = ({ user }) => {
     useFormik({
       enableReinitialize: true,
       initialValues: {
-        fullName: user?.fullName,
-        phoneNumber: user?.phoneNumber,
-        email: user?.email,
-        address: user?.address,
-        job: user?.job,
-        bio: user?.bio,
+        fullName: user?.fullName || "",
+        phoneNumber: user?.phoneNumber || "",
+        email: user?.email || "",
+        address: user?.address || "",
+        job: user?.job || "",
+        bio: user?.bio || "",
       },
       onSubmit,
       validationSchema: profileSchema,
     });
+
   const inputs = [
     {
       id: 1,
@@ -48,7 +51,7 @@ const Account = ({ user }) => {
     {
       id: 2,
       name: "phoneNumber",
-      type: "number",
+      type: "text",
       placeholder: "Your Phone Number",
       value: values.phoneNumber,
       errorMessage: errors.phoneNumber,
@@ -91,23 +94,42 @@ const Account = ({ user }) => {
       touched: touched.bio,
     },
   ];
+
   return (
-    <form className="lg:p-8 flex-1 lg:mt-0 mt-5" onSubmit={handleSubmit}>
-      <Title addClass="text-[40px]">Account Settings</Title>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4">
-        {inputs.map((input) => (
-          <Input
-            key={input.id}
-            {...input}
-            onBlur={handleBlur}
-            onChange={handleChange}
-          />
-        ))}
+    <div className="w-full animate-fade-in">
+      <div className="mb-6">
+        <Title addClass="text-4xl text-secondary">Account Settings</Title>
+        <p className="text-gray-400 text-sm mt-1">Manage your personal information and profile details.</p>
       </div>
-      <button className="btn-primary mt-4" type="submit">
-        Update
-      </button>
-    </form>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+          {inputs.map((input, index) => (
+            <motion.div
+              key={input.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <Input
+                {...input}
+                onBlur={handleBlur}
+                onChange={handleChange}
+              />
+            </motion.div>
+          ))}
+        </div>
+        
+        <div className="flex justify-end pt-4">
+          <button 
+             className="px-10 h-14 bg-primary text-secondary font-bold rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
+             type="submit"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
